@@ -16,7 +16,7 @@ class GithubAPI {
             override fun onResponse(call: Call<List<Repository>?>?,
                                     response: Response<List<Repository>?>?) {
                 response?.body()?.let {
-                    val r = ArrayList<Repository>()
+                    var r = ArrayList<Repository>()
                     r.addAll(it)
                     cb(true, r, null)
                 }
