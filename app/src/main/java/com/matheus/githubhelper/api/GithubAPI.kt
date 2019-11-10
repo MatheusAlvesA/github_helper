@@ -14,9 +14,14 @@ class GithubAPI {
         cb: (sucesso: Boolean, resposta: ArrayList<Repository>?, erroMsg: String?) -> Unit
     ) {
         service.buscarRepositorios(query).enqueue(object: Callback<List<Repository>?> {
-            override fun onResponse(call: Call<List<Repository>?>?,
-                                    response: Response<List<Repository>?>?) {
-                response?.body()?.let {
+            override fun onResponse(call: Call<List<Repository>?>,
+                                    response: Response<List<Repository>?>) {
+                if (!response.isSuccessful) {
+                    cb(false, null, "Falha na consulta: "+response.message())
+                    return
+                }
+
+                response.body()?.let {
                     val r = ArrayList<Repository>()
                     r.addAll(it)
                     cb(true, r, null)
