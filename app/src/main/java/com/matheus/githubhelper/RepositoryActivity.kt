@@ -8,13 +8,16 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.matheus.githubhelper.api.GithubAPI
+import com.matheus.githubhelper.models.FavoritedRepository
 import com.matheus.githubhelper.models.Repository
+import com.matheus.githubhelper.persistence.Banco
 import kotlinx.android.synthetic.main.activity_repository.*
 
 class RepositoryActivity : AppCompatActivity() {
 
     private lateinit var repository: Repository
     private val api: GithubAPI = GithubAPI()
+    private val banco = Banco(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +34,10 @@ class RepositoryActivity : AppCompatActivity() {
         }
 
         nameRepository.text = repository.name
+        atualiarImagem()
+        starImage.setOnClickListener {
+            favoritar()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -47,6 +54,33 @@ class RepositoryActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    fun favoritar() {
+        if(favoritado()) {
+            banco.removeFavoritedRepository(repository.full_name)
+        } else {
+            banco.insertFavoriteRepository(
+                FavoritedRepository(repository.full_name, "")
+            )
+        }
+        atualiarImagem()
+    }
+
+    private fun favoritado(): Boolean {
+        val lista = banco.listFavoritedRepositories()
+        for(rep in lista) {
+            if(rep.full_name == repository.full_name)
+                return true
+        }
+        return false
+    }
+
+    private fun atualiarImagem() {
+        if(favoritado()) {
+            starImage.setImageResource(android.R.drawable.star_big_on)
+        } else {
+            starImage.setImageResource(android.R.drawable.star_big_off)
+        }
+    }
 
     private fun getRepositoryFromBundle(bundle: Bundle): Repository {
         return Repository(
