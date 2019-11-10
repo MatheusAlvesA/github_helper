@@ -27,12 +27,18 @@ class MainActivity : AppCompatActivity() {
         //adapter = GithubAdapter(list)
         //recyclerView.adapter = adapter
 
-        btnBuscar.setOnClickListener(){
+        btnBuscar.setOnClickListener {
             acessarRepositorios(edtBuscar.text.toString())
         }
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-
+        api.buscarCommits("open-android/Android" ){sucesso, res, erro ->
+            if(sucesso) {
+                Toast.makeText(this, "Commits: "+res?.size, Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, erro, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     fun acessarRepositorios(chave: String){
