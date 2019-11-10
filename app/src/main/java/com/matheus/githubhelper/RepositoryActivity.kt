@@ -1,7 +1,11 @@
 package com.matheus.githubhelper
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import com.matheus.githubhelper.api.GithubAPI
 import com.matheus.githubhelper.models.Repository
@@ -28,6 +32,21 @@ class RepositoryActivity : AppCompatActivity() {
 
         nameRepository.text = repository.name
     }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.title.toString() == "acessar") {
+            val abrirNavegador = Intent(Intent.ACTION_VIEW)
+            abrirNavegador.data = Uri.parse(repository.html_url)
+            startActivity(abrirNavegador)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
     private fun getRepositoryFromBundle(bundle: Bundle): Repository {
         return Repository(
