@@ -27,16 +27,17 @@
         </activity>
 
         <service
-            android:name=".services.SyncService"
-            android:enabled="true"
-            android:exported="false"
-            />
-        <service
             android:name=".services.SyncJobService"
             android:enabled="true"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE"
             />
+
+        <receiver android:name=".services.BootReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

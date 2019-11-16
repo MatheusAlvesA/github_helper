@@ -8,7 +8,6 @@ import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -77,9 +76,10 @@ class MainActivity : AppCompatActivity(), ItemRepositoryListener {
        val service =  getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
        val component = ComponentName(this, SyncJobService::class.java)
        val jobInfo = JobInfo.Builder(1, component)
-                    .setPeriodic(60000)
+                    .setPeriodic(900000)
                     .build()
-       Log.i("SERVICE", service.schedule(jobInfo).toString())
+
+      service.schedule(jobInfo)
     }
 
     private fun restaurarCoresJanela() {
