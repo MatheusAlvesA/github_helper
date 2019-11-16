@@ -1,15 +1,17 @@
 package com.matheus.githubhelper
 
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.matheus.githubhelper.adapter.GithubAdapter
 import com.matheus.githubhelper.adapter.ItemRepositoryListener
 import com.matheus.githubhelper.api.GithubAPI
 import com.matheus.githubhelper.models.Repository
+import com.matheus.githubhelper.services.SyncService
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), ItemRepositoryListener {
@@ -22,8 +24,6 @@ class MainActivity : AppCompatActivity(), ItemRepositoryListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-
         //adapter = GithubAdapter(list)
         //recyclerView.adapter = adapter
 
@@ -31,14 +31,18 @@ class MainActivity : AppCompatActivity(), ItemRepositoryListener {
             acessarRepositorios(edtBuscar.text.toString())
         }
         recyclerView.layoutManager = LinearLayoutManager(this)
+
+        startService(Intent(this, SyncService::class.java))
+
+        restaurarCoresJanela()
     }
 
-    fun acessarRepositorios(chave: String){
+    private fun acessarRepositorios(chave: String) {
         api.buscarRepositorios(chave) { sucesso, res, erro ->
             if(sucesso) {
                 val adapter = GithubAdapter(res!!, this)
                 recyclerView.adapter = adapter
-                Toast.makeText(this, "Sucesso: "+res?.size, Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Sucesso: "+res.size, Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(this, "Erro: $erro", Toast.LENGTH_LONG).show()
             }
@@ -63,5 +67,12 @@ class MainActivity : AppCompatActivity(), ItemRepositoryListener {
         intent.putExtra("repository", bundle)
 
         startActivity(intent)
+    }
+
+    private fun restaurarCoresJanela() {
+        val whiteColor = ContextCompat.getColor(this, R.color.colorPrimaryWhite)
+        val whiteDark = ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        window.statusBarColor = whiteDark
+        window.setBackgroundDrawable(ColorDrawable(whiteColor))
     }
 }
