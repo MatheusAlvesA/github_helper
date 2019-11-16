@@ -8,7 +8,6 @@ import android.app.job.JobParameters
 import android.app.job.JobService
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.matheus.githubhelper.MainActivity
 import com.matheus.githubhelper.R
@@ -28,7 +27,6 @@ class SyncJobService: JobService() {
     }
 
     override fun onStartJob(p0: JobParameters?): Boolean {
-        Log.i("SERVICE", "JobService executado")
         params = p0
         checarRepositorios(banco.listFavoritedRepositories())
         return true
@@ -37,11 +35,9 @@ class SyncJobService: JobService() {
 
     private fun checarRepositorios(lista: ArrayList<FavoritedRepository>) {
         if(lista.size <= 0) {
-            Log.i("SERVICE", "LISTA VAZIA")
             jobFinished(params, true)
             return
         }
-        Log.i("SERVICE", "Executando para ${lista.size} repositórios")
         val rep = lista[0]
         lista.remove(rep)
         checarRepositorio(rep) { checarRepositorios(lista) }
@@ -50,21 +46,15 @@ class SyncJobService: JobService() {
     private fun checarRepositorio(rep: FavoritedRepository, cb: () -> Unit) {
         helper.buscarCommits(rep.full_name) {sucesso, resposta, _ ->
             if(sucesso && resposta != null) {
-                Log.i("SERVICE", "Sucesso na requisicao")
                 val commit: Commit = resposta[0]
                 if(rep.commit_id != commit.id) {
-                    Log.i("SERVICE", "Commit alterado: ${commit.id} != ${rep.commit_id}")
                     if(rep.commit_id != "") {
-                        Log.i("SERVICE", "Emitiu alerta")
                         notificar(rep.full_name)
                     }
                     rep.commit_id = commit.id
                     banco.updateFavoritedRepository(rep)
-                } else {
-                    Log.i("SERVICE", "Commit igual: ${commit.id} == ${rep.commit_id}")
                 }
             }
-            Log.i("SERVICE", "Sequisicao concluida\n")
             cb()
         }
     }
