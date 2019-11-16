@@ -21,6 +21,7 @@ class SyncJobService: JobService() {
 
     private val helper = GithubAPI()
     private val banco = Banco(this)
+    private var params: JobParameters? = null
 
     override fun onStopJob(p0: JobParameters?): Boolean {
         return true
@@ -28,14 +29,16 @@ class SyncJobService: JobService() {
 
     override fun onStartJob(p0: JobParameters?): Boolean {
         Log.i("SERVICE", "JobService executado")
+        params = p0
         checarRepositorios(banco.listFavoritedRepositories())
-        return false
+        return true
     }
 
 
     private fun checarRepositorios(lista: ArrayList<FavoritedRepository>) {
         if(lista.size <= 0) {
             Log.i("SERVICE", "LISTA VAZIA")
+            jobFinished(params, true)
             return
         }
         Log.i("SERVICE", "Executando para ${lista.size} repositórios")
