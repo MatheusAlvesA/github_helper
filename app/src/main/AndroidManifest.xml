@@ -12,6 +12,7 @@
         android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".FavoritosActivity"></activity>
         <activity android:name=".RepositoryActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -30,15 +31,13 @@
             android:name=".services.SyncJobService"
             android:enabled="true"
             android:exported="false"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            />
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <receiver android:name=".services.BootReceiver" >
+        <receiver android:name=".services.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>
