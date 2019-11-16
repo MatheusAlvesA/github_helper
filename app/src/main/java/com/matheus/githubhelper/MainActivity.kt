@@ -8,6 +8,8 @@ import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,6 +40,18 @@ class MainActivity : AppCompatActivity(), ItemRepositoryListener {
 
         restaurarCoresJanela()
         setupService()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.favoritos_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.title.toString() == "favoritos") {
+            startActivity(Intent(this, FavoritosActivity::class.java))
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun acessarRepositorios(chave: String) {
