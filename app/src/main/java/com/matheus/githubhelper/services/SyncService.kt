@@ -4,6 +4,7 @@ import android.app.*
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.matheus.githubhelper.MainActivity
 import com.matheus.githubhelper.R
@@ -22,13 +23,17 @@ class SyncService: Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Log.i("SERVICE", "Service iniciado")
         checarRepositorios(banco.listFavoritedRepositories())
         return super.onStartCommand(intent, flags, startId)
     }
 
     private fun checarRepositorios(lista: ArrayList<FavoritedRepository>) {
-        if(lista.size <= 0)
+        if(lista.size <= 0) {
+            Log.i("SERVICE", "LISTA VAZIA")
             return
+        }
+        Log.i("SERVICE", "Executando para ${lista.size} repositórios")
         val rep = lista[0]
         lista.remove(rep)
         checarRepositorio(rep) { checarRepositorios(lista) }
@@ -37,15 +42,21 @@ class SyncService: Service() {
     private fun checarRepositorio(rep: FavoritedRepository, cb: () -> Unit) {
         helper.buscarCommits(rep.full_name) {sucesso, resposta, _ ->
             if(sucesso && resposta != null) {
+                Log.i("SERVICE", "Sucesso na requisicao")
                 val commit: Commit = resposta[0]
                 if(rep.commit_id != commit.id) {
+                    Log.i("SERVICE", "Commit alterado: ${commit.id} != ${rep.commit_id}")
                     if(rep.commit_id != "") {
+                        Log.i("SERVICE", "Emitiu alerta")
                         notificar(rep.full_name)
                     }
                     rep.commit_id = commit.id
                     banco.updateFavoritedRepository(rep)
+                } else {
+                    Log.i("SERVICE", "Commit igual: ${commit.id} == ${rep.commit_id}")
                 }
             }
+            Log.i("SERVICE", "Sequisicao concluida\n")
             cb()
         }
     }

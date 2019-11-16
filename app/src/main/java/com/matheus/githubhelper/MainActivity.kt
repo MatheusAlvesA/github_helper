@@ -1,9 +1,14 @@
 package com.matheus.githubhelper
 
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,7 +16,7 @@ import com.matheus.githubhelper.adapter.GithubAdapter
 import com.matheus.githubhelper.adapter.ItemRepositoryListener
 import com.matheus.githubhelper.api.GithubAPI
 import com.matheus.githubhelper.models.Repository
-import com.matheus.githubhelper.services.SyncService
+import com.matheus.githubhelper.services.SyncJobService
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), ItemRepositoryListener {
@@ -32,9 +37,8 @@ class MainActivity : AppCompatActivity(), ItemRepositoryListener {
         }
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        startService(Intent(this, SyncService::class.java))
-
         restaurarCoresJanela()
+        setupService()
     }
 
     private fun acessarRepositorios(chave: String) {
@@ -67,6 +71,15 @@ class MainActivity : AppCompatActivity(), ItemRepositoryListener {
         intent.putExtra("repository", bundle)
 
         startActivity(intent)
+    }
+
+    private fun setupService() {
+       val service =  getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+       val component = ComponentName(this, SyncJobService::class.java)
+       val jobInfo = JobInfo.Builder(1, component)
+                    .setPeriodic(60000)
+                    .build()
+       Log.i("SERVICE", service.schedule(jobInfo).toString())
     }
 
     private fun restaurarCoresJanela() {

@@ -1,12 +1,14 @@
 package com.matheus.githubhelper
 
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.matheus.githubhelper.api.GithubAPI
 import com.matheus.githubhelper.models.FavoritedRepository
 import com.matheus.githubhelper.models.Repository
@@ -38,6 +40,8 @@ class RepositoryActivity : AppCompatActivity() {
         starImage.setOnClickListener {
             favoritar()
         }
+
+        restaurarCoresJanela()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -96,5 +100,12 @@ class RepositoryActivity : AppCompatActivity() {
             bundle.getInt("forks_count"),
             bundle.getInt("open_issues_count")
         )
+    }
+
+    private fun restaurarCoresJanela() {
+        val whiteColor = ContextCompat.getColor(this, R.color.colorPrimaryWhite)
+        val whiteDark = ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        window.statusBarColor = whiteDark
+        window.setBackgroundDrawable(ColorDrawable(whiteColor))
     }
 }
