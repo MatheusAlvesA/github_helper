@@ -1,5 +1,6 @@
 package com.matheus.githubhelper
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -9,6 +10,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.matheus.githubhelper.adapter.RepositoryAdapter
 import com.matheus.githubhelper.api.GithubAPI
 import com.matheus.githubhelper.models.FavoritedRepository
 import com.matheus.githubhelper.models.Repository
@@ -26,9 +29,12 @@ class RepositoryActivity : AppCompatActivity() {
         setContentView(R.layout.activity_repository)
 
         repository = getRepositoryFromBundle(intent.getBundleExtra("repository")!!)
+        rvComit.layoutManager = LinearLayoutManager(this)
 
         api.buscarCommits(repository.full_name) {sucesso, res, erro ->
             if(sucesso) {
+                val adapter = RepositoryAdapter(res!!)
+                rvComit.adapter = adapter
                 Toast.makeText(this, "Commits: "+res?.size, Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(this, erro, Toast.LENGTH_LONG).show()
@@ -102,6 +108,7 @@ class RepositoryActivity : AppCompatActivity() {
         )
     }
 
+    @SuppressLint("NewApi")
     private fun restaurarCoresJanela() {
         val whiteColor = ContextCompat.getColor(this, R.color.colorPrimaryWhite)
         val whiteDark = ContextCompat.getColor(this, R.color.colorPrimaryDark)
