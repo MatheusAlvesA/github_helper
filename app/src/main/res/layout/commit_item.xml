@@ -15,7 +15,7 @@
         android:padding="8dp">
 
         <TextView
-            android:id="@+id/txtId"
+            android:id="@+id/txtMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -36,7 +36,7 @@
             />
 
         <TextView
-            android:id="@+id/txtMessage"
+            android:id="@+id/txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right"

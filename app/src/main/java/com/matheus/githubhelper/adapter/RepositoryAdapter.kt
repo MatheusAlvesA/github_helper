@@ -22,7 +22,7 @@ class RepositoryAdapter(
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         val commit = commits.get(position)
-        holder.id.text = commit.id
+        //holder.id.text = commit.id
         holder.authorName.text = commit.name_author
         holder.authorEmail.text = commit.email_author
         holder.message.text = commit.message
@@ -30,7 +30,7 @@ class RepositoryAdapter(
 
 
     class VH(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var id: TextView = itemView.findViewById(R.id.txtId)
+        //var id: TextView = itemView.findViewById(R.id.txtId)
         var authorName: TextView = itemView.findViewById(R.id.txtNameAuthor)
         var authorEmail: TextView = itemView.findViewById(R.id.txtEmailAuthor)
         var message: TextView = itemView.findViewById(R.id.txtMessage)

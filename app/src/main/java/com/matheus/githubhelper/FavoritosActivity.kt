@@ -1,5 +1,6 @@
 package com.matheus.githubhelper
 
+import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.matheus.githubhelper.adapter.FavoritosAdapter
 import com.matheus.githubhelper.adapter.ItemFavoritoListener
+import com.matheus.githubhelper.dialog.RemoverDialog
 import com.matheus.githubhelper.models.FavoritedRepository
 import com.matheus.githubhelper.persistence.Banco
 import kotlinx.android.synthetic.main.activity_favoritos.*
@@ -35,10 +37,18 @@ class FavoritosActivity : AppCompatActivity(), ItemFavoritoListener {
     }
 
     override fun onLongClick(favorito: FavoritedRepository) {
-        banco.removeFavoritedRepository(favorito.full_name)
-        val i = lista.indexOf(favorito)
-        lista.remove(favorito)
-        adapter!!.notifyItemRemoved(i)
+        RemoverDialog.show(supportFragmentManager,
+            object : RemoverDialog.OnRepositoryTrashSetListener {
+                override fun onRepositoryTrashSet(boo: Boolean) {
+                    if (boo == true) {
+                        banco.removeFavoritedRepository(favorito.full_name)
+                        val i = lista.indexOf(favorito)
+                        lista.remove(favorito)
+                        adapter!!.notifyItemRemoved(i)
+                    }
+                }
+            })
+
     }
 
     private fun restaurarCoresJanela() {
