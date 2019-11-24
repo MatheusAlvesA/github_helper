@@ -42,10 +42,10 @@ class RepositoryActivity : AppCompatActivity() {
         }
 
         nameRepository.text = repository.name
-        atualiarImagem()
-        starImage.setOnClickListener {
-            favoritar()
-        }
+        //atualiarImagem()
+        //starImage.setOnClickListener {
+        //    favoritar()
+        //}
 
         restaurarCoresJanela()
     }
@@ -60,20 +60,34 @@ class RepositoryActivity : AppCompatActivity() {
             val abrirNavegador = Intent(Intent.ACTION_VIEW)
             abrirNavegador.data = Uri.parse(repository.html_url)
             startActivity(abrirNavegador)
+        } else if (item.title.toString() == "favoritar"){
+            if(favoritado()) {
+                banco.removeFavoritedRepository(repository.full_name)
+                item.setIcon(android.R.drawable.star_big_off)
+                Toast.makeText(this, "repositorio removido com sucesso", Toast.LENGTH_LONG).show()
+            } else {
+                banco.insertFavoriteRepository(
+                    FavoritedRepository(repository.full_name, "")
+                )
+                item.setIcon(android.R.drawable.star_big_on)
+                Toast.makeText(this, "repositorio favoritado com sucesso", Toast.LENGTH_LONG).show()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    fun favoritar() {
-        if(favoritado()) {
-            banco.removeFavoritedRepository(repository.full_name)
-        } else {
-            banco.insertFavoriteRepository(
-                FavoritedRepository(repository.full_name, "")
-            )
-        }
-        atualiarImagem()
-    }
+//    fun favoritar() {
+//        if(favoritado()) {
+//            banco.removeFavoritedRepository(repository.full_name)
+//            Toast.makeText(this, "repositorio removido com sucesso", Toast.LENGTH_LONG).show()
+//        } else {
+//            banco.insertFavoriteRepository(
+//                FavoritedRepository(repository.full_name, "")
+//            )
+//            Toast.makeText(this, "repositorio favoritado com sucesso", Toast.LENGTH_LONG).show()
+//        }
+//        atualiarImagem()
+//    }
 
     private fun favoritado(): Boolean {
         val lista = banco.listFavoritedRepositories()
@@ -84,13 +98,13 @@ class RepositoryActivity : AppCompatActivity() {
         return false
     }
 
-    private fun atualiarImagem() {
-        if(favoritado()) {
-            starImage.setImageResource(android.R.drawable.star_big_on)
-        } else {
-            starImage.setImageResource(android.R.drawable.star_big_off)
-        }
-    }
+//    private fun atualiarImagem() {
+//        if(favoritado()) {
+//            starImage.setImageResource(android.R.drawable.star_big_on)
+//        } else {
+//            starImage.setImageResource(android.R.drawable.star_big_off)
+//        }
+//    }
 
     private fun getRepositoryFromBundle(bundle: Bundle): Repository {
         return Repository(

@@ -2,6 +2,7 @@ package com.matheus.githubhelper.persistence
 
 import android.content.ContentValues
 import android.content.Context
+import android.widget.Toast
 import com.matheus.githubhelper.models.FavoritedRepository
 
 class Banco(ctx: Context) {
@@ -15,6 +16,8 @@ class Banco(ctx: Context) {
         }
         db.insert(TABLE_REPOSITORY_NAME, null, cv)
         db.close()
+
+        //Toast.makeText(this, "repositorio favoritado com sucesso", Toast.LENGTH_LONG).show()
     }
 
     fun listFavoritedRepositories(): ArrayList<FavoritedRepository> {
