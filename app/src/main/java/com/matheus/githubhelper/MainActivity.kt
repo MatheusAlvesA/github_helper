@@ -23,15 +23,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), ItemRepositoryListener {
 
     private val api: GithubAPI = GithubAPI()
-    //private var list : ArrayList<Repository> = ArrayList()
-    //private var adapter: GithubAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        //adapter = GithubAdapter(list)
-        //recyclerView.adapter = adapter
 
         btnBuscar.setOnClickListener {
             acessarRepositorios(edtBuscar.text.toString())

@@ -35,17 +35,13 @@ class RepositoryActivity : AppCompatActivity() {
             if(sucesso) {
                 val adapter = RepositoryAdapter(res!!)
                 rvComit.adapter = adapter
-                Toast.makeText(this, "Commits: "+res?.size, Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Commits: "+res.size, Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(this, erro, Toast.LENGTH_LONG).show()
             }
         }
 
         nameRepository.text = repository.name
-        //atualiarImagem()
-        //starImage.setOnClickListener {
-        //    favoritar()
-        //}
 
         restaurarCoresJanela()
     }
@@ -76,19 +72,6 @@ class RepositoryActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-//    fun favoritar() {
-//        if(favoritado()) {
-//            banco.removeFavoritedRepository(repository.full_name)
-//            Toast.makeText(this, "repositorio removido com sucesso", Toast.LENGTH_LONG).show()
-//        } else {
-//            banco.insertFavoriteRepository(
-//                FavoritedRepository(repository.full_name, "")
-//            )
-//            Toast.makeText(this, "repositorio favoritado com sucesso", Toast.LENGTH_LONG).show()
-//        }
-//        atualiarImagem()
-//    }
-
     private fun favoritado(): Boolean {
         val lista = banco.listFavoritedRepositories()
         for(rep in lista) {
@@ -97,14 +80,6 @@ class RepositoryActivity : AppCompatActivity() {
         }
         return false
     }
-
-//    private fun atualiarImagem() {
-//        if(favoritado()) {
-//            starImage.setImageResource(android.R.drawable.star_big_on)
-//        } else {
-//            starImage.setImageResource(android.R.drawable.star_big_off)
-//        }
-//    }
 
     private fun getRepositoryFromBundle(bundle: Bundle): Repository {
         return Repository(

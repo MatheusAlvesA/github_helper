@@ -1,6 +1,5 @@
 package com.matheus.githubhelper
 
-import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
